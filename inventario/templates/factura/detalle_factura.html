@@ -1,0 +1,35 @@
+{% extends 'core.html' %}
+{% block content %}
+{% endblock %}
+{% block h1 %}
+    <h1>Factura #{{ factura.id }}</h1>
+    <p>Fecha: {{ factura.fecha }}</p>
+    <p>Cliente: {{ factura.cliente }}</p>
+    <p>Estado: {{ factura.estado }}</p>
+    <p>Método de Pago: {{ factura.metodo_pago }}</p>
+    <p>Subtotal: ${{ factura.subtotal }}</p>
+    <p>IVA: ${{ factura.iva }}</p>
+    <p>Total: ${{ factura.total }}</p>
+
+    <h2>Detalle de la factura:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio unitario</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detalle in detalles %}
+            <tr>
+                <td>{{ detalle.producto }}</td>
+                <td>{{ detalle.cantidad }}</td>
+                <td>${{ detalle.precio }}</td>
+                <td>${{ detalle.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

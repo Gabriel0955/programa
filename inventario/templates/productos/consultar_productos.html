@@ -1,0 +1,88 @@
+
+
+{% extends 'core.html' %}
+{% load static %}
+{% block content %}
+{% endblock %}
+
+{% block h1 %}
+    <style>
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        select {
+            appearance: none; /* Elimina la apariencia nativa del select en algunos navegadores */
+        }
+
+        /* Opcional: Estilo para el botón "Buscar" cuando está deshabilitado */
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+    <h1 class="text-center">Productos</h1>
+
+    <div class="container">
+
+        <form method="GET" action="{% url 'consultar_producto' %}">
+            <div class="input-container">
+                <input type="text" name="search" placeholder="Buscar por nombre o ID">
+                <button type="submit">Buscar</button>
+            </div>
+            <div class="input-container">
+                <select name="categoria">
+                    <option value="">Todas las categorías</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+
+
+        <div class="row d-flex align-items-stretch">
+            {% for producto in productos %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="imagenc">
+                        <img src="{{ producto.imagen.url }}" class="card-img-top img-fluid" alt="{{ producto.nombre }}">
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ producto.nombre }}</h5>
+                            <p class="card-text">Descripcion:{{ producto.descripcion }}</p>
+                            <p class="card-text">Precio: ${{ producto.precio }}</p>
+                            <p class="card-text">Categoría: {{ producto.categoria.nombre }}</p>
+                            <p class="card-text">ID: {{ producto.id }}</p>
+                            <form action="{% url 'eliminar_producto' producto.id %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                            <form action="{% url 'modificar_producto' producto.id %}" method="get" class="d-inline">
+                                <button type="submit" class="btn btn-primary">Modificar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col">
+                    <p class="text-center">No hay productos disponibles.</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center">
+            <a href="{% url 'agregar_producto' %}" class="btn btn-success">Agregar Producto</a>
+        </div>
+    </div>
+{% endblock %}

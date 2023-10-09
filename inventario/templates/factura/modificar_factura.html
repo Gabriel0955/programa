@@ -1,0 +1,231 @@
+{%extends "base/base.html" %}
+{%block content%}
+<div class="container-fluid mt-2 p-4">
+	<div>
+		<h4 class="text-secondary">Edición de factura</h4>
+	</div>
+	
+	<form action="" method="POST">
+		{%csrf_token%}
+		
+		<div class="row">
+
+			<div class="col-2">
+				<div>
+					<label for="descripcion" class="form-label fst-italic">Agendamientos</label>
+					<select class="form-select" id="agendamiento" name="agendamiento_id" aria-label="Default select example">
+						<option selected>Seleccione una cita</option>
+						{%for agendamiento in agendamientos%}
+						<option value="{{agendamiento.id}}">{{agendamiento.codigo}}</option>
+						{%empty%}
+						<option>No hay registro</option>
+						{%endfor%}
+					</select>
+				</div>
+				<div>
+					<div class="mb-3">
+						<label for="precio_" class="form-label">Precio</label>
+						<input type="number" class="form-control" id="precio">
+					</div>
+				</div>
+				<div>
+					<div class="mb-3">
+						<label for="cantidad_" class="form-label">Ingrese la cantidad</label>
+						<input type="number" class="form-control" id="cantidad">
+					</div>
+				</div>
+				<div>
+					<button type="button" class="btn btn-success m-auto" onclick="agrega_detalle()">agregar</button>
+				</div>
+			</div>
+			<div class="col-10">
+				<div class="row">
+						<div class="mb-3 col-4">
+						  	<label for="descripcion" class="form-label fst-italic">Cliente</label>
+						  	<select class="form-select" name="paciente_id" aria-label="Default select example">
+							  <option selected>Seleccione un cliente</option>
+							  {%for paciente in pacientes%}
+							  <option value="{{paciente.id}}" {%if paciente.id == factura.paciente_id%} selected {%endif%}>{{paciente.nombre}}</option>
+							  {%empty%}
+							  <option value="">No hay registros</option>
+							  {%endfor%}
+							</select>
+						</div>
+						<div class="mb-3 col-4">
+						  <label for="descripcion" class="form-label fst-italic">Subtotal</label>
+						  <input type="text" class="form-control" id="descripcion" name="subtotal_id" value="{{factura.subtotal}}" placeholder="ingrese una descripcion">
+						</div>
+						<div class="mb-3 col-4">
+						  <label for="descripcion" class="form-label fst-italic">Iva</label>
+						  <input type="text" class="form-control" id="descripcion" name="iva_id" value="{{factura.iva}}" placeholder="ingrese una descripcion">
+						</div>
+						<div class="mb-3 col-4">
+						  <label for="descripcion" class="form-label fst-italic">Total</label>
+						  <input type="text" class="form-control" id="descripcion" name="total_id" value="{{factura.total}}" placeholder="ingrese una descripcion">
+						</div>
+						<div class="mb-3 col-4">
+						  	<label for="descripcion" class="form-label fst-italic">Estado</label>
+						  	<select class="form-select" name="estado" aria-label="Default select example">
+							  <option >Seleccione un Estado</option>
+							  <option value="Pagado">Pagado</option>
+							  <option value="Pendiente">Pendiente</option>
+							</select>
+						</div>
+						
+						<div class="mb-3 col-4">
+						  	<label for="descripcion" class="form-label fst-italic">Metodo de pago</label>
+						  	<select class="form-select" name="metodo_pago_id" aria-label="Default select example">
+							  <option selected>Seleccione un metodo de pago</option>
+							  {%for metodo_pago in metodo_pagos%}
+							  <option value="{{metodo_pago.id}}" {%if metodo_pago.id == factura.metodo_pago_id%} selected {%endif%}>{{metodo_pago.descripcion}}</option>
+							  {%empty%}
+							  <option value="">No hay registros</option>
+							  {%endfor%}
+							</select>
+						</div>	
+					
+				
+					</div>
+					<div class="row">
+						<table class="table">
+							<thead>
+							    <tr>
+							      <th scope="col">Descripcion</th>
+							      <th scope="col">Precio</th>
+							      <th scope="col">Cantidad</th>
+							      <th scope="col">Acción</th>
+							    </tr>
+						  	</thead>
+						  	<tbody id="tbody_detalles">
+						    	
+						  	</tbody>
+						</table>
+					</div>
+					<div class="row">
+
+						<div id="detalles_factura">
+
+						</div>
+						
+					</div>
+			</div>
+			
+		</div>
+		<br>
+		<div class="text-end">
+			<button type="submit" class="btn btn-success">Actualizar</button>
+		</div>
+	</form>
+	
+</div>
+<script>
+
+	var num=0;
+	
+	var detalles =[];
+
+	var subtotal_factura = document.getElementById("subtotal_id");
+	var iva_dactura = document.getElementById("iva_id");
+	var total_factura = document.getElementById("total_id");
+
+	var tbody_detalles = document.getElementById("tbody_detalles");
+	var detalles_factura = document.getElementById("detalles_factura");
+
+	var precio = document.getElementById("precio");
+	var agendamiento = document.getElementById("agendamiento");
+	var cantidad = document.getElementById("cantidad");
+
+	window.onload=function informacion(){
+		
+		{%for detalle in factura.detalleFacturas.all%}
+			detalles.push({
+				count:num,
+				id:"{{detalle.agendamiento.id}}",
+				cita:"{{detalle.agendamiento.codigo}}",
+				cantidad:"{{detalle.cantidad}}",
+				precio:"{{detalle.precio}}",
+				subtotal:"{{detalle.subtotal}}"
+			})
+			num++;				
+		{%endfor%}
+		calculos();
+		console.log(detalles);
+
+
+	}
+	
+
+	function agrega_detalle(){
+
+		if(precio.value ==0 || precio.value=="" || cantidad.value==="" || cantidad.value===0 ||agendamiento.value==""){
+			alert("No puede ingresar detalles vacio");
+			return false;
+		}
+		
+
+		detalles.push(
+		{
+			count:num,
+			id:agendamiento.value,
+			cita:agendamiento.selectedOptions[0].text,
+			precio:precio.value,
+			cantidad:cantidad.value,
+			subtotal:(parseFloat(precio.value)*parseInt(cantidad.value)).toFixed(2),
+		});
+
+		calculos();
+
+		//detalles_all.innerHTML=opc;
+
+		precio.value="";
+		cantidad.value="";
+		agendamiento.value="";
+		num++;
+
+	}
+
+	function calculos(){
+		let subtotal=0;
+		let iva = 0;
+		let total =0;
+		let row ="";
+		let campos ="";
+		for (var i = 0; i < detalles.length; i++) {
+			row += "<tr>"+
+						"<td>"+detalles[i].cita+"</td>"+
+						"<td>$"+detalles[i].precio+"</td>"+
+						"<td>"+detalles[i].cantidad+"</td>"+
+						"<td>"+
+							"<button id='"+i+"' type='button' class='btn btn-danger' onclick='eliminar_item("+i+")'>X</button>"+
+						"</td>"+
+						
+					"</tr>";
+			campos += "<input type='number' hidden='true' name='agendamientos[]' value='"+detalles[i].id+"'>"+
+					"<input type='number' hidden='true' name='cantidades[]' value='"+detalles[i].cantidad+"'>"+
+					"<input type='number' hidden='true' name='precios[]' value='"+detalles[i].precio+"'>"+
+					"<input type='number' hidden='true' name='subtotales[]' value='"+detalles[i].subtotal+"'>";
+
+			subtotal +=parseFloat(detalles[i].precio)*parseInt(detalles[i].cantidad);
+			
+		}
+
+		iva =subtotal*0.12;
+		total =subtotal+iva;
+		tbody_detalles.innerHTML = row;
+		detalles_factura.innerHTML = campos;
+		
+		subtotal_factura.value = subtotal.toFixed(2);
+		iva_dactura.value = iva.toFixed(2);
+		total_factura.value = total.toFixed(2);
+	}
+
+	function eliminar_item(id){
+		detalles.splice(
+		  detalles.indexOf({count:id}), 1
+		);
+		calculos();
+
+	}
+
+</script>
+{%endblock%}

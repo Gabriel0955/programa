@@ -1,0 +1,66 @@
+{% extends 'core.html' %}
+{% load static %}
+{% block content %}
+
+{% endblock %}
+{% block h1 %}
+    <form method="POST">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-plus"></i>
+                    Crear categoria
+                </h3>
+            </div>
+
+            <div class="card-body">
+                {% csrf_token %}
+                {{ form }}
+            </div>
+            <div id="formset-container">
+                {{ formset.management_form }}
+                {% for form in formset %}
+                    <div class="formset-row">
+                        {{ form.as_table }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="card-footer ">
+                <button type="submit" class="btn btn-primary btn-float"><i class="fas fa-save"></i> Guardar</button>
+                <button type="button" class="btn btn-secondary" id="agregar-form2"><i class="fas fa-plus"></i> Agregar
+                    Productos
+                </button>
+
+            </div>
+        </div>
+
+    </form>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var formsetContainer = document.getElementById("formset-container");
+            var agregarForm2Btn = document.getElementById("agregar-form2");
+            var formsetTotalFormsInput = document.getElementById("id_form-TOTAL_FORMS");
+            var formsetPrefix = "{{ formset.prefix }}";
+            var formsetFormCount = {{ formset.total_form_count }};
+
+            agregarForm2Btn.addEventListener("click", function () {
+                var formsetRow = document.createElement("div");
+                formsetRow.classList.add("formset-row");
+
+                var formIndex = formsetFormCount;
+                var formsetForm = document.createElement("div");
+                formsetForm.innerHTML = "{{ formset.empty_form.as_table|escapejs }}"
+                    .replace(/_prefix_/g, formIndex)
+                    .replace(/{{ formset.prefix }}/g, formsetPrefix);
+
+                        formsetRow.appendChild(formsetForm);
+                formsetContainer.appendChild(formsetRow);
+
+                formsetTotalFormsInput.value = formsetFormCount + 1;
+                formsetFormCount++;
+            });
+        });
+    </script>
+
+
+{% endblock %}

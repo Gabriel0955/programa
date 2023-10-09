@@ -1,0 +1,13 @@
+{%extends "core.html" %}
+{%block content%}
+
+
+{%endblock%}
+{% block h1 %}
+    <h1>Lista de Facturas</h1>
+    <ul>
+        {% for factura in facturas %}
+        <li><a href="{% url 'detalle_factura' factura.id %}">Factura #{{ factura.id }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

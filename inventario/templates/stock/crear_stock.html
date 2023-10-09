@@ -1,0 +1,78 @@
+{% extends 'core.html' %}
+{% block content %}
+{% endblock %}
+{% block h1 %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px #007bff;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-primary:focus {
+            box-shadow: 0 0 5px #007bff;
+        }
+    </style>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Agregar Stock</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="{{ form.producto.id_for_label }}" class="form-label">Producto:</label>
+                {{ form.producto }}
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.bodega.id_for_label }}" class="form-label">Bodega:</label>
+                {{ form.bodega }}
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.cantidad.id_for_label }}" class="form-label">Cantidad:</label>
+                {{ form.cantidad }}
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+{% endblock %}

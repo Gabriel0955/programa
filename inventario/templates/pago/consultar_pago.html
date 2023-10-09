@@ -1,0 +1,80 @@
+{% extends 'core.html' %}
+{% block content %}
+{% endblock %}
+{% block h1 %}
+
+    <table class="table table-striped table-bordered">
+
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Cliente</th>
+            <th scope="col">Producto</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Método de Pago</th>
+
+            <th scope="col">Vendedor</th>
+            <th scope="col">Monto</th>
+
+            <th scope="col">Cantidad</th>
+            <th scope="col">Subtotal</th>
+            <th scope="col">Total</th>
+            <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for pago in venta %}
+            <tr>
+                <td class="bg-light">{{ pago.cliente }}</td>
+                <td class="bg-light">
+
+
+                    {% for item in pago.items.all %}
+                        {{ item.producto.nombre }}<br>
+                    {% empty %}
+                        <li>No hay productos en esta venta.</li>
+                    {% endfor %}
+                </td>
+
+                <td class="bg-light">{{ pago.fecha }}</td>
+                <td class="bg-light">{{ pago.forma_pago }}</td>
+
+                <td class="bg-light">
+                    {% for vendedor in pago.empleado.all %}
+                        <p>{{ vendedor.nombre }}</p>
+                    {% endfor %}
+                </td>
+                <td class="bg-light">
+
+
+                    {% for item in pago.items.all %}
+                        ${{ item.producto.precio }}<br>
+                    {% endfor %}
+                </td>
+
+                <td class="bg-light">
+
+
+                    {% for item in pago.items.all %}
+                        {{ item.cantidad }}<br>
+                    {% endfor %}
+                </td>
+                <td class="bg-light">
+                    {% for subtotal in pago.calcular_subtotal %}
+                        ${{ subtotal }} <br>
+                    {% endfor %}</td>
+                <td class="bg-light">${{ pago.calcular_total }}</td>
+
+
+                <td class="bg-light">
+                    <a href="{% url 'eliminar_pago' pago.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                    <a href="{% url 'detalle_venta' pago.id %}" class="btn btn-primary">Ver</a>
+                    <a href="{% url 'consultar_venta_pdf' pago.id %}" class="btn btn-primary">Descargar PDF</a>
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

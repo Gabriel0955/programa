@@ -1,0 +1,46 @@
+{% extends 'core.html' %}
+{% block content %}
+{% endblock %}
+{% block h1 %}
+            <form class="form-inline mb-4" method="GET">
+            <div class="form-group">
+                <input type="text" class="form-control" name="search" placeholder="Buscar empleado">
+            </div>
+            <button type="submit" class="btn btn-primary ml-2">Buscar</button>
+        </form>
+<table class="table table-striped table-bordered">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Dirección</th>
+      <th scope="col">Teléfono</th>
+      <th scope="col">Fecha de Contratación</th>
+      <th scope="col">Rol</th>
+      <th scope="col">Salario</th>
+      <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for empleado in empleados %}
+      <tr>
+        <td class="bg-light">{{ empleado.nombre }}</td>
+        <td class="bg-light">{{ empleado.direccion }}</td>
+        <td class="bg-light">{{ empleado.telefono }}</td>
+        <td class="bg-light">{{ empleado.fecha_contratacion }}</td>
+        <td class="bg-light">{{ empleado.rol }}</td>
+        <td class="bg-light">{{ empleado.salario }}</td>
+        <td class="bg-light">
+          <a href="{% url 'modificar_empleado' empleado.id %}" class="btn btn-primary btn-sm ">Modificar</a>
+          <a href="{% url 'eliminar_empleado' empleado.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+    <div class="text-center">
+        <a href="{% url 'agregar_empleado' %}" class="btn btn-success">Agregar empleado</a>
+    </div>
+{% endblock %}

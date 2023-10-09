@@ -1,0 +1,33 @@
+{% extends 'core.html' %}
+{% load static %}
+{% block content %}
+{% endblock %}
+{% block h1 %}
+<h1>Lista de Reportes</h1>
+
+<a href="{% url 'agregar_reporte' %}" class="btn btn-primary">Agregar Reporte</a>
+
+{% if reportes %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Archivo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for reporte in reportes %}
+        <tr>
+          <td>{{ reporte.nombre }}</td>
+          <td>{{ reporte.descripcion }}</td>
+          <td><a href="{{ reporte.archivo.url }}" target="_blank">Descargar</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No se encontraron reportes.</p>
+{% endif %}
+
+{% endblock %}

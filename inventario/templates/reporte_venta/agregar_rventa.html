@@ -1,0 +1,12 @@
+{% extends 'core.html' %}
+{% block content %}
+{% endblock %}
+{% block h1 %}
+<h1>Generar Informe de Ventas</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Generar Informe</button>
+</form>
+{% endblock %}

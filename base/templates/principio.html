@@ -1,0 +1,56 @@
+{% extends 'core.html' %}
+{% block content %}
+{% endblock %}
+{% block h1 %}
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container text-center">
+            <h1 class="display-4">Boutique HG </h1>
+            <p class="lead">Viste con confianza y comodidad, encuentra tu esencia en cada prenda.</p>
+            <a class="btn btn-primary btn-lg" href="#menu" role="button">Explorar más</a>
+        </div>
+    </div>
+
+    <div class="container" id="menu">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img src="../../media/conjunto.jpg" class="card-img-top" alt="Productos">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestión de Productos</h5>
+                        <p class="card-text">Añade, modifica y elimina productos de tu tienda. Mantén un inventario
+                            actualizado y controla los detalles de cada producto.</p>
+                        <a href="{% url 'consultar_producto' %}" class="btn btn-primary">Ver más</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img src="../../media/reguistro.jpg" class="card-img-top" alt="Ventas">
+                    <div class="card-body">
+                        <h5 class="card-title">Registro de Ventas</h5>
+                        <p class="card-text">Registra todas tus ventas de forma rápida y sencilla. Obtén informes
+                            detallados de tus ventas diarias, mensuales o anuales.</p>
+                        <a href="{% url 'consultar_carrito' %}" class="btn btn-primary">Ver más</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img src="../../media/cliente.jpg" class="card-img-top" alt="Clientes">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestión de Clientes</h5>
+                        <p class="card-text">Administra tu base de datos de clientes. Registra nuevos clientes, realiza
+                            seguimiento de sus compras.</p>
+                        <a href="{% url 'consultar_cliente' %}" class="btn btn-primary">Ver más</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2023 Sistema de Ventas de Ropa. Todos los derechos reservados.</p>
+    </footer>
+
+{% endblock %}
+

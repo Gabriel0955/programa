@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dist/css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'estilo.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url("../../media/fondo.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+
+    </style>
+
+
+    <title>Title</title>
+</head>
+<body>
+
+{% block content %}
+
+{% endblock %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#menu">Boutique Aguirre</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse navbar-nav-scroll" id="navbarSupportedContent">
+        <!-- Utilizamos navbar-nav-scroll -->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'mi_vista' %}">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'consultar_producto' %}">Productos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'consultar_cliente' %}">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'consultar_carrito' %}">Ventas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'consultar_pago' %}">Pago</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'ver_stock' %}">Ver Stock</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'detalle_lista_deseos' %}">Lista De Deseos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'mostrar_empleados' %}">Gestión Empleado</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'consultar_bodega' %}">Bodega</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'consultar_proveedor' %}">Proveedores</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'mostrar_ticket' %}">Ticket</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'consultar_rventa' %}">Reporte Venta</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'listar_reportes' %}">Reporte</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+
+
+{% block h1 %}
+
+
+{% endblock %}
+
+
+
+
+{% load static %}
+
+<script src="{% static 'dist/js/bootstrap.min.js' %}"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+{% block custom_js %}
+{% endblock %}
+
+
+</body>
+</html>

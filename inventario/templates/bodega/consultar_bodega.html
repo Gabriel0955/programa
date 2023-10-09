@@ -1,0 +1,69 @@
+{% extends 'core.html' %}
+{% load static %}
+{% block content %}
+{% endblock %}
+{% block h1 %}
+<div class="container">
+    <h1 class="text-center">Bodega</h1>
+        <form class="form-inline mb-4" method="GET">
+            <div class="form-group">
+                <input type="text" class="form-control" name="search" placeholder="Buscar bodega">
+            </div>
+            <button type="submit" class="btn btn-primary ml-2">Buscar</button>
+        </form>
+    <div class="row">
+        {% for bodega in bodega %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><strong>{{ bodega.nombre }}</strong></h5>
+                    <p class="card-text"><strong>Dirección:</strong> {{ bodega.direccion }}</p>
+                    <p class="card-text"><strong>Teléfono:</strong> {{ bodega.telefono }}</p>
+                    <p class="card-text"><strong>Fecha de creación:</strong> {{ bodega.fecha_creacion }}</p>
+                    <p class="card-text"><strong>Productos:</strong></p>
+                    <ul class="list-group">
+                        {% for producto in bodega.productos.all %}
+                        <li class="list-group-item">{{ producto.nombre }}</li>
+                        {% empty %}
+                        <li class="list-group-item">No hay productos asociados</li>
+                        {% endfor %}
+                    </ul>
+                    <p class="card-text"><strong>Proveedores:</strong></p>
+                    <ul class="list-group">
+                        {% for proveedor in bodega.proveedor.all %}
+                        <li class="list-group-item">{{ proveedor.nombre }}</li>
+                        {% empty %}
+                        <li class="list-group-item">No hay proveedores asociados</li>
+                        {% endfor %}
+                    </ul>
+                    <p class="card-text"><strong>Categorías:</strong></p>
+                    <ul class="list-group">
+                        {% for categoria in bodega.categoria.all %}
+                        <li class="list-group-item">{{ categoria.nombre }}</li>
+                        {% empty %}
+                        <li class="list-group-item">No hay categorías asociadas</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'modificar_bodega' bodega.id %}" class="btn btn-primary">Modificar</a>
+                    <a href="{% url 'eliminar_bodega' bodega.id %}" class="btn btn-danger">Eliminar</a>
+
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="col">
+            <p class="text-center">No hay proveedores disponibles.</p>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center">
+        <a href="{% url 'crear_bodega' %}" class="btn btn-success">Agregar Bodega</a>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
