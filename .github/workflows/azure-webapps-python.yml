@@ -19,68 +19,75 @@
 
 name: Build and deploy Python app to Azure Web App
 
-env:
-  AZURE_WEBAPP_NAME: inventario-app-service  # set this to the name of your Azure Web App
-  PYTHON_VERSION: '3.8'              # set this to the Python version to use
-
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      PYTHON_VERSION: '3.8'
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Python version
-        uses: actions/setup-python@v3.0.0
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
 
-      - name: Create and start virtual environment
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ./.venv
+          # key must not be empty; usa hashFiles para crear una key determinista
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Debug cache info
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          echo "CACHE_KEY=${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}"
+          echo "Listing cache paths (if exist):"
+          ls -la ~/.cache || true
+          ls -la ./.venv || true
+
+      - name: Create virtual environment
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install --upgrade pip
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          . .venv/bin/activate
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+      - name: Run tests (optional)
+        run: |
+          . .venv/bin/activate
+          # Descomenta o reemplaza según tus tests
+          # pytest -q
 
-      - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v4
-        with:
-          name: python-app
-          path: |
-            .
-            !venv/
+      - name: Build (opcional)
+        run: |
+          . .venv/bin/activate
+          # Agrega pasos de build si aplica
 
-  deploy:
-    permissions:
-      contents: none
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Development'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: python-app
-          path: .
-
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          # Publica usando el perfil; define el secreto AZURE_WEBAPP_PUBLISH_PROFILE en Settings -> Secrets
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          # package: '.' publica la raíz del repo; ajusta si tu build genera una carpeta específica
+          package: '.'
+
+      # Ejemplo de uso de salida sin usar ::set-output (solo si necesitas producir una salida para otros pasos)
+      # - name: Set custom output (si otro job necesita esta salida)
+      #   run: echo "deploy_status=success" >> $GITHUB_OUTPUT
