@@ -1,9 +1,9 @@
 xhtml2pdf==0.2.16
-Django==3.2.25
+Django==4.2.16
 gunicorn==22.0.0
 psycopg2-binary==2.9.9
 django-crispy-forms==2.1
-django-allauth==0.57.2
+django-allauth==0.63.6
 django-storages==1.14.3
 Pillow==10.3.0
 reportlab==4.2.0
